@@ -1,5 +1,7 @@
 # Wordler
 
+Wordler can automatically solve wordle puzzle.
+
 ## Installation
 
 ```shell
