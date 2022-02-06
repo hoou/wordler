@@ -1,7 +1,7 @@
 import pytest
 from unittest.mock import MagicMock
 
-from wordler import Feedback, SingleFeedback, Wordler
+from wordlerer import Feedback, SingleFeedback, Wordlerer
 
 
 def choose_next(options: list[str]) -> str:
@@ -70,7 +70,7 @@ def test_get_options(
     feedback,
     expected_result: list[str],
 ):
-    result = Wordler(word_pool, 5, lambda x: Feedback())._get_options(
+    result = Wordlerer(word_pool, 5, lambda x: Feedback())._get_options(
         word_pool, word_attempt, feedback
     )
     assert set(result) == set(expected_result)
@@ -115,5 +115,5 @@ def test_solve(
 ):
     feedback_handler = MagicMock()
     feedback_handler.side_effect = feedbacks
-    wordler = Wordler(initial_words, 5, feedback_handler, choose_next)
-    assert result == wordler.solve()
+    wordlerer = Wordlerer(initial_words, 5, feedback_handler, choose_next)
+    assert result == wordlerer.solve()

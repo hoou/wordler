@@ -1,16 +1,17 @@
-# Wordler
+# Wordlerer
 
-Wordler can automatically solve wordle puzzle.
+Wordlerer can automatically solve wordle puzzle in the browser.
 
 ## Installation
 
 ```shell
-pip install wordler
+pip install wordlerer
 ```
 
 ## Usage
 
 ```python
-from wordler import BrowserApp
+from wordlerer import BrowserApp
+
 BrowserApp().run()
 ```

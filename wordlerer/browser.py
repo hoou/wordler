@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from wordler import Feedback, SingleFeedback, Wordler
+from wordlerer import Feedback, SingleFeedback, Wordlerer
 
 
 class BrowserApp:
@@ -133,13 +133,13 @@ class BrowserApp:
         self.driver.get("https://www.powerlanguage.co.uk/wordle/")
         self.close_popup()
 
-        wordler = Wordler(
+        wordlerer = Wordlerer(
             words=english_words.english_words_lower_alpha_set,
             word_size=self.WORD_SIZE,
             feedback_handler=self.get_feedback,
             choice_handler=self.choose if not self.auto else None,
         )
-        if wordler.solve():
+        if wordlerer.solve():
             print("congrats!")
         else:
             print("you lost :(")

@@ -1,6 +1,6 @@
 import pytest
 
-from wordler import utils
+from wordlerer import utils
 
 
 @pytest.mark.parametrize(

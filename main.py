@@ -1,4 +1,4 @@
-from wordler import BrowserApp
+from wordlerer import BrowserApp
 
 if __name__ == "__main__":
     # App().run()

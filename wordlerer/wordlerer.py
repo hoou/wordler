@@ -4,7 +4,7 @@ from enum import Enum
 from pydantic import BaseModel
 from typing import Callable, Optional
 
-from wordler import utils
+from wordlerer import utils
 
 
 class SingleFeedback(str, Enum):
@@ -18,7 +18,7 @@ class Feedback(BaseModel):
     word_in_list: bool = True
 
 
-class Wordler:
+class Wordlerer:
     def __init__(
         self,
         words: list[str],

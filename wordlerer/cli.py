@@ -1,6 +1,6 @@
 import english_words
 
-from wordler import Feedback, SingleFeedback, Wordler
+from wordlerer import Feedback, SingleFeedback, Wordlerer
 
 
 class App:
@@ -62,11 +62,11 @@ class App:
                 return word
 
     def run(self):
-        wordler = Wordler(
+        wordlerer = Wordlerer(
             words=english_words.english_words_lower_alpha_set,
             word_size=self.get_word_size(),
             feedback_handler=self.get_feedback,
             choice_handler=self.choose,
         )
-        wordler.solve()
+        wordlerer.solve()
         print("congrats!")
