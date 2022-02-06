@@ -1,6 +1,6 @@
-import english_words
-
-from wordlerer import Feedback, SingleFeedback, Wordlerer
+from . import english_words
+from .models import Feedback, SingleFeedback
+from .wordlerer import Wordlerer
 
 
 class App:
@@ -63,7 +63,7 @@ class App:
 
     def run(self):
         wordlerer = Wordlerer(
-            words=english_words.english_words_lower_alpha_set,
+            words=english_words.lower_alpha_set,
             word_size=self.get_word_size(),
             feedback_handler=self.get_feedback,
             choice_handler=self.choose,

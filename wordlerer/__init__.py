@@ -1,7 +1,7 @@
 __version__ = "0.1.0"
 
-from wordlerer.wordlerer import Feedback, SingleFeedback, Wordlerer
-from wordlerer.cli import App
-from wordlerer.browser import BrowserApp
+from .cli import App
+from .browser import BrowserApp
+from .wordlerer import Wordlerer
 
-__all__ = ("App", "BrowserApp", "Feedback", "SingleFeedback", "Wordlerer")
+__all__ = ("App", "BrowserApp", "Wordlerer")

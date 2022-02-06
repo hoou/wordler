@@ -1,12 +1,12 @@
 import time
 
-import english_words
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webelement import WebElement
 
-from wordlerer import Feedback, SingleFeedback, Wordlerer
-
+from . import english_words
+from .models import Feedback, SingleFeedback
+from .wordlerer import Wordlerer
 
 class BrowserApp:
     WORD_SIZE = 5
@@ -134,7 +134,7 @@ class BrowserApp:
         self.close_popup()
 
         wordlerer = Wordlerer(
-            words=english_words.english_words_lower_alpha_set,
+            words=english_words.lower_alpha_set,
             word_size=self.WORD_SIZE,
             feedback_handler=self.get_feedback,
             choice_handler=self.choose if not self.auto else None,

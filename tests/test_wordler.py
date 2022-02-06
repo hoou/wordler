@@ -1,7 +1,8 @@
 import pytest
 from unittest.mock import MagicMock
 
-from wordlerer import Feedback, SingleFeedback, Wordlerer
+from wordlerer import Wordlerer
+from wordlerer.models import Feedback, SingleFeedback
 
 
 def choose_next(options: list[str]) -> str:

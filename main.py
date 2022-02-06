@@ -1,5 +1,7 @@
 from wordlerer import BrowserApp
 
-if __name__ == "__main__":
-    # App().run()
+def main():
     BrowserApp().run()
+
+if __name__ == "__main__":
+    main()
