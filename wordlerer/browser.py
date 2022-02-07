@@ -8,6 +8,7 @@ from . import english_words
 from .models import Feedback, SingleFeedback
 from .wordlerer import Wordlerer
 
+
 class BrowserApp:
     WORD_SIZE = 5
     KEYBOARD = {
@@ -47,26 +48,33 @@ class BrowserApp:
         self.feedback_number = 0
         self.auto = auto
 
-    def get_feedback(self, word: str) -> Feedback:
+    def _get_game(self) -> WebElement:
+        game_app = self._get_game_app()
+        game_theme_manager = self._expand_shadow_element(game_app)[1]
+        return game_theme_manager.find_element(By.ID, "game")
+
+    def _get_keyboard(self) -> WebElement:
+        game_keyboard = self._get_game().find_element(By.TAG_NAME, "game-keyboard")
+        return self._expand_shadow_element(game_keyboard)[1]
+
+    def _get_feedback(self, word: str) -> Feedback:
         print(f"getting feedback for word: {word}")
 
-        game_app = self.get_game_app_element()
-        game_theme_manager = self.expand_shadow_element(game_app)[1]
-        game_keyboard = game_theme_manager.find_element(By.TAG_NAME, "game-keyboard")
-        keyboard = self.expand_shadow_element(game_keyboard)[1]
+        keyboard = self._get_keyboard()
+        game = self._get_game()
 
         for w in word:
-            self.click_on_key(keyboard, key=w)
-        self.confirm_word(keyboard)
+            self._click_on_key(keyboard, key=w)
+        self._confirm_word(keyboard)
 
-        self.wait(3)
+        self._wait(3)
 
         single_feedbacks = []
 
-        game_row = game_theme_manager.find_element(
+        game_row = game.find_element(
             By.CSS_SELECTOR, f"#board > game-row:nth-child({self.feedback_number + 1})"
         )
-        row = self.expand_shadow_element(game_row)[1]
+        row = self._expand_shadow_element(game_row)[1]
 
         for i in range(self.WORD_SIZE):
             game_tile: WebElement = row.find_element(
@@ -74,7 +82,7 @@ class BrowserApp:
             )
             evaluation = game_tile.get_attribute("evaluation")
             if not evaluation:
-                self.clean_row(keyboard)
+                self._clean_row(keyboard)
                 return Feedback(word_in_list=False)
             single_feedbacks.append(SingleFeedback(evaluation))
 
@@ -84,37 +92,38 @@ class BrowserApp:
 
         return Feedback(single_feedbacks=single_feedbacks)
 
-    def click_on_key(self, keyboard: WebElement, key: str):
+    def _click_on_key(self, keyboard: WebElement, key: str):
         print(f"clicking on key: {key}")
         key_element: WebElement = keyboard.find_element(
             By.CSS_SELECTOR, self.KEYBOARD[key.upper()]
         )
         key_element.click()
 
-    def expand_shadow_element(self, element: WebElement) -> list[WebElement]:
+    def _expand_shadow_element(self, element: WebElement) -> list[WebElement]:
         return self.driver.execute_script(
             "return arguments[0].shadowRoot.children", element
         )
 
-    def close_popup(self):
-        print("closing popup")
-        game_app_element = self.get_game_app_element()
-        game_app_element.click()
+    def _close_modal(self):
+        print("closing modal")
+        game = self._get_game()
+        game.click()
+        print("modal closed")
 
-    def get_game_app_element(self):
+    def _get_game_app(self):
         return self.driver.find_element(By.TAG_NAME, "game-app")
 
-    def confirm_word(self, keyboard_element: WebElement):
+    def _confirm_word(self, keyboard_element: WebElement):
         print("confirming word")
-        self.click_on_key(keyboard_element, "ENTER")
+        self._click_on_key(keyboard_element, "ENTER")
 
     @staticmethod
-    def wait(seconds: int):
+    def _wait(seconds: int):
         print(f"waiting {seconds} seconds")
         time.sleep(seconds)
 
     @staticmethod
-    def choose(options: list[str]) -> str:
+    def _choose(options: list[str]) -> str:
         print(options)
         while True:
             word = input("choose one word: ")
@@ -123,21 +132,22 @@ class BrowserApp:
             else:
                 return word
 
-    def clean_row(self, keyboard: WebElement) -> None:
+    def _clean_row(self, keyboard: WebElement) -> None:
         print("wrong word, cleaning row")
         for _ in range(self.WORD_SIZE):
-            self.click_on_key(keyboard, "BACKSPACE")
+            self._click_on_key(keyboard, "BACKSPACE")
 
     def run(self):
         print("going on website")
         self.driver.get("https://www.powerlanguage.co.uk/wordle/")
-        self.close_popup()
+        self.driver.maximize_window()
+        self._close_modal()
 
         wordlerer = Wordlerer(
             words=english_words.lower_alpha_set,
             word_size=self.WORD_SIZE,
-            feedback_handler=self.get_feedback,
-            choice_handler=self.choose if not self.auto else None,
+            feedback_handler=self._get_feedback,
+            choice_handler=self._choose if not self.auto else None,
         )
         if wordlerer.solve():
             print("congrats!")
